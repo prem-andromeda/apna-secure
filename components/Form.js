@@ -44,7 +44,7 @@ const Form = () => {
         setRes((d) => true);
         otpPost();
 
-        console.log(data);
+        // console.log(data);
       }
     } catch (error) {
       console.log({ error });
@@ -68,12 +68,12 @@ const Form = () => {
       if (data.error) {
         console.log(error);
       } else if (data.response) {
-        console.log(data.response);
+        // console.log(data.response);
         setRes({ ...res, dbRes: true });
         router.push(
           `/otp/fullName=${form.fname} ${form.lname}&phoneNumber=${form.mobileNo}&product=${form.product}`
         );
-        await gupshup();
+        gupshup();
       }
     } catch (error) {
       console.log({ error });
@@ -83,10 +83,11 @@ const Form = () => {
 
   async function gupshup() {
     const raw = await fetch(
-      `http://enterprise.smsgupshup.com/GatewayAPI/rest?method=SendMessage&send_to=91${form.mobileNo}&msg=${otpDigit}%20is%20the%20OTP%20for%20your%20mobile%20number%20verification%20on%20ApnaPaisa.&msg_type=TEXT&userid=2000020122&auth_scheme=plain&password=!Apna%40Gupshup0506%23&v=1.1&format=text`
+      `http://enterprise.smsgupshup.com/GatewayAPI/rest?method=SendMessage&send_to=91${form.mobileNo}&msg=${otpDigit}%20is%20the%20OTP%20for%20your%20mobile%20number%20verification%20on%20ApnaPaisa.&msg_type=TEXT&userid=2000020122&auth_scheme=plain&password=!Apna%40Gupshup0506%23&v=1.1&format=text`,
+      { mode: "no-cors" }
     );
     const data = await raw;
-    console.log(data);
+    // console.log({ data });
     // setRes((d)=>{...d,dbRes:false})
   }
 

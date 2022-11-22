@@ -11,6 +11,8 @@ const Otp = () => {
     fourth: "",
   });
 
+  const [otpValidate, setOtpValidate] = useState([]);
+
   const [rawParams, setRawParams] = useState([]);
   const [params, setParams] = useState({});
 
@@ -20,8 +22,14 @@ const Otp = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log("form submitted");
-    router.push("/thankyou");
+    const merged =
+      otp.first + "" + otp.second + "" + otp.third + "" + otp.fourth;
+    // console.log(merged);
+    // console.log(otpValidate);
+    if (merged == otpValidate[0].otp_digit) {
+      router.push("/thankyou");
+      console.log("form submitted");
+    }
   };
 
   useEffect(() => {
@@ -34,24 +42,25 @@ const Otp = () => {
 
   const { fullName, phoneNumber, product } = Object.fromEntries(rawParams);
 
-  async function postData() {
+  useEffect(() => {
+    otpFetch();
+  }, [phoneNumber]);
+
+  async function otpFetch() {
     try {
-      const res = await fetch("http://localhost:3000/api/postData", {
-        method: "Post",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: `${form.fname} ${form.lname}`,
-          city: form.city,
-          product: form.product,
-          mobile_no: form.mobileNo,
-          email: form.email,
-        }),
-      });
+      const res = await fetch(
+        `http://localhost:3000/api/otpVerify?mobile_no=${phoneNumber}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       const data = await res.json();
+      // console.log(data);
+      data.length > 0 && setOtpValidate((d) => [...d, data[0]]);
       if (data.error) {
         setError((data) => ({ validation: false, database: true }));
       }
-      console.log(data);
     } catch (error) {
       console.log({ error });
     }
@@ -72,9 +81,9 @@ const Otp = () => {
               <div className="fw-6 text-muted mb-4">
                 Hi <span className="fw-bold text-dark">{`${fullName}`}</span>,
                 an OTP has been sent on your number {`${phoneNumber}`}{" "}
-                <Link href={""}>
+                {/* <Link href={""}>
                   <span className="fw-bold text-primary">Change Number</span>
-                </Link>
+                </Link> */}
               </div>
               <div className="otp_input text-start mb-2">
                 <label htmlFor="digit">Type your 4 digit security code</label>

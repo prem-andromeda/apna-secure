@@ -9,12 +9,12 @@ export default async function handler(req, res) {
     password: "Andro@123",
   });
   try {
-    const query = `SELECT email FROM apna_secure WHERE email='${req.query.email}'`;
+    const query = `SELECT otp_digit FROM otp_log WHERE mobile_no='${req.query.mobile_no}' order by timestamp DESC`;
     const values = [];
     const [data] = await dbconnection.execute(query, values);
     dbconnection.end();
 
-    res.status(200).json({ products: data });
+    res.status(200).json(data);
     console.log(req.query.ip);
   } catch (error) {
     // unhide to check error
