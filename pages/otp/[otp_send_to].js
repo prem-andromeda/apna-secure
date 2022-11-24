@@ -14,7 +14,6 @@ const Otp = () => {
   const [otpValidate, setOtpValidate] = useState([]);
 
   const [rawParams, setRawParams] = useState([]);
-  const [params, setParams] = useState({});
 
   const changeHandler = (e) => {
     setOtp({ ...otp, [e.target.name]: e.target.value.replace(/\D/g, "") });
@@ -25,10 +24,12 @@ const Otp = () => {
     const merged =
       otp.first + "" + otp.second + "" + otp.third + "" + otp.fourth;
     // console.log(merged);
-    // console.log(otpValidate);
+    // console.log(otpValidate[0]);
     if (merged == otpValidate[0].otp_digit) {
-      router.push("/thankyou");
-      console.log("form submitted");
+      router.push(`/thankyou/${product}`);
+      // console.log("form submitted");
+    } else {
+      alert("Incorrect OTP, Please retry");
     }
   };
 
@@ -57,13 +58,55 @@ const Otp = () => {
       );
       const data = await res.json();
       // console.log(data);
-      data.length > 0 && setOtpValidate((d) => [...d, data[0]]);
+      data.length > 0 && setOtpValidate((d) => [data[0]]);
       if (data.error) {
         setError((data) => ({ validation: false, database: true }));
       }
     } catch (error) {
       console.log({ error });
     }
+  }
+
+  let otpDigit = Math.floor(1000 + Math.random() * 9000);
+
+  async function otpPost() {
+    setOtp({
+      first: "",
+      second: "",
+      third: "",
+      fourth: "",
+    });
+    try {
+      const res = await fetch("http://localhost:3000/api/otpPost", {
+        method: "Post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          otp_digit: otpDigit,
+          mobile_no: phoneNumber,
+        }),
+      });
+      const data = await res.json();
+      if (data.error) {
+        console.log(error);
+      } else if (data.response) {
+        gupshup();
+      }
+    } catch (error) {
+      console.log({ error });
+      setRes({ ...res, dbRes: false });
+    }
+  }
+
+  async function gupshup() {
+    const raw = await fetch(
+      `http://enterprise.smsgupshup.com/GatewayAPI/rest?method=SendMessage&send_to=91${phoneNumber}&msg=${otpDigit}%20is%20the%20OTP%20for%20your%20mobile%20number%20verification%20on%20ApnaPaisa.&msg_type=TEXT&userid=2000020122&auth_scheme=plain&password=!Apna%40Gupshup0506%23&v=1.1&format=text`,
+      { mode: "no-cors" }
+    );
+    const data = await raw;
+    alert("OTP Sent");
+    otpFetch();
+    // console.log({ data });
+    // setRes((d)=>{...d,dbRes:false})
   }
 
   return (
@@ -81,9 +124,9 @@ const Otp = () => {
               <div className="fw-6 text-muted mb-4">
                 Hi <span className="fw-bold text-dark">{`${fullName}`}</span>,
                 an OTP has been sent on your number {`${phoneNumber}`}{" "}
-                {/* <Link href={""}>
+                <Link href={"/"}>
                   <span className="fw-bold text-primary">Change Number</span>
-                </Link> */}
+                </Link>
               </div>
               <div className="otp_input text-start mb-2">
                 <label htmlFor="digit">Type your 4 digit security code</label>
@@ -134,6 +177,7 @@ const Otp = () => {
                 <Link
                   href="#"
                   className="text-primary fw-bold text-decoration-none"
+                  onClick={() => otpPost()}
                 >
                   Resend
                 </Link>

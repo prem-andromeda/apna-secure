@@ -19,7 +19,14 @@ const Form = () => {
   });
 
   const changeHandler = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    e.target.name == "mobileNo"
+      ? setForm({ ...form, [e.target.name]: e.target.value.replace(/\D/g, "") })
+      : e.target.name == "email" || e.target.name == "product"
+      ? setForm({ ...form, [e.target.name]: e.target.value })
+      : setForm({
+          ...form,
+          [e.target.name]: e.target.value.replace(/[^a-z]/gi, ""),
+        });
   };
 
   // console.log(form.mobileNo);
@@ -166,15 +173,15 @@ const Form = () => {
             onChange={(e) => changeHandler(e)}
           >
             <option></option>
-            <option value="term-insurance">Term Insurance</option>
-            <option value="health-insurance">Health Insurance</option>
-            <option value="ulip">ULIP</option>
-            <option value="guaranteed-income-plan">
+            <option value="Term Insurance">Term Insurance</option>
+            <option value="Health Insurance">Health Insurance</option>
+            <option value="ULIP">ULIP</option>
+            <option value="Guaranteed Income Plan">
               Guaranteed Income Plan
             </option>
-            <option value="personal-accident">Personal Accident</option>
-            <option value="motor-insurance">Motor Insurance</option>
-            <option value="home-and-Property-insurance">
+            <option value="Personal Accident">Personal Accident</option>
+            <option value="Motor Insurance">Motor Insurance</option>
+            <option value="Home and Property Insurance">
               Home & Property Insurance
             </option>
           </select>
