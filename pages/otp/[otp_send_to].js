@@ -4,28 +4,27 @@ import React, { useEffect, useState } from "react";
 
 const Otp = () => {
   const router = useRouter();
-  const [otp, setOtp] = useState({
-    first: "",
-    second: "",
-    third: "",
-    fourth: "",
-  });
+  const [otp, setOtp] = useState(new Array(4).fill(""));
 
   const [otpValidate, setOtpValidate] = useState([]);
 
   const [rawParams, setRawParams] = useState([]);
 
-  const changeHandler = (e) => {
-    setOtp({ ...otp, [e.target.name]: e.target.value.replace(/\D/g, "") });
+  const handleChange = (element, index) => {
+    setOtp([...otp.map((d, idx) => (idx === index ? element.value : d))]);
+
+    //Focus next input
+    if (element.nextSibling) {
+      element.nextSibling.focus();
+    }
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
-    const merged =
-      otp.first + "" + otp.second + "" + otp.third + "" + otp.fourth;
+    const mergedOtp = otp.join("");
     // console.log(merged);
     // console.log(otpValidate[0]);
-    if (merged == otpValidate[0].otp_digit) {
+    if (mergedOtp == otpValidate[0].otp_digit) {
       router.push(`/thankyou/${product}`);
       // console.log("form submitted");
     } else {
@@ -70,12 +69,7 @@ const Otp = () => {
   let otpDigit = Math.floor(1000 + Math.random() * 9000);
 
   async function otpPost() {
-    setOtp({
-      first: "",
-      second: "",
-      third: "",
-      fourth: "",
-    });
+    setOtp(new Array(4).fill(""));
     try {
       const res = await fetch("http://localhost:3000/api/otpPost", {
         method: "Post",
@@ -93,7 +87,6 @@ const Otp = () => {
       }
     } catch (error) {
       console.log({ error });
-      setRes({ ...res, dbRes: false });
     }
   }
 
@@ -106,7 +99,6 @@ const Otp = () => {
     alert("OTP Sent");
     otpFetch();
     // console.log({ data });
-    // setRes((d)=>{...d,dbRes:false})
   }
 
   return (
@@ -131,42 +123,21 @@ const Otp = () => {
               <div className="otp_input text-start mb-2">
                 <label htmlFor="digit">Type your 4 digit security code</label>
                 <div className="d-flex align-items-center justify-content-between mt-2">
-                  <input
-                    type="text"
-                    name="first"
-                    className="form-control text-center py-2 px-1 p-md-2 mx-1 mx-md-2"
-                    value={otp.first}
-                    onChange={(e) => changeHandler(e)}
-                    maxLength={1}
-                    required
-                  />
-                  <input
-                    type="text"
-                    name="second"
-                    className="form-control text-center py-2 px-1 p-md-2 mx-1 mx-md-2"
-                    value={otp.second}
-                    onChange={(e) => changeHandler(e)}
-                    maxLength={1}
-                    required
-                  />
-                  <input
-                    type="text"
-                    name="third"
-                    className="form-control text-center py-2 px-1 p-md-2 mx-1 mx-md-2"
-                    value={otp.third}
-                    onChange={(e) => changeHandler(e)}
-                    maxLength={1}
-                    required
-                  />
-                  <input
-                    type="text"
-                    name="fourth"
-                    className="form-control text-center py-2 px-1 p-md-2 mx-1 mx-md-2"
-                    value={otp.fourth}
-                    onChange={(e) => changeHandler(e)}
-                    maxLength={1}
-                    required
-                  />
+                  {otp.map((data, index) => {
+                    return (
+                      <input
+                        type="text"
+                        name="otp"
+                        key={index}
+                        className="form-control text-center py-2 px-1 p-md-2 mx-1 mx-md-2"
+                        value={data}
+                        onChange={(e) => handleChange(e.target, index)}
+                        onFocus={(e) => e.target.select()}
+                        maxLength={1}
+                        required
+                      />
+                    );
+                  })}
                 </div>
               </div>
               <button type="submit" className="btn btn-primary submit_btn my-4">

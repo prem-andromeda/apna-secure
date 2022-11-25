@@ -13,11 +13,6 @@ const Form = () => {
     mobileNo: "",
   });
 
-  const [res, setRes] = useState({
-    dbRes: false,
-    apiRes: false,
-  });
-
   const changeHandler = (e) => {
     e.target.name == "mobileNo"
       ? setForm({ ...form, [e.target.name]: e.target.value.replace(/\D/g, "") })
@@ -45,10 +40,8 @@ const Form = () => {
       });
       const data = await res.json();
       if (data.error) {
-        setRes((d) => false);
         console.log(error);
       } else if (data.response) {
-        setRes((d) => true);
         otpPost();
 
         // console.log(data);
@@ -76,7 +69,6 @@ const Form = () => {
         console.log(error);
       } else if (data.response) {
         // console.log(data.response);
-        setRes({ ...res, dbRes: true });
         router.push(
           `/otp/fullName=${form.fname} ${form.lname}&phoneNumber=${form.mobileNo}&product=${form.product}`
         );
@@ -84,7 +76,6 @@ const Form = () => {
       }
     } catch (error) {
       console.log({ error });
-      setRes({ ...res, dbRes: false });
     }
   }
 
@@ -95,7 +86,6 @@ const Form = () => {
     );
     const data = await raw;
     // console.log({ data });
-    // setRes((d)=>{...d,dbRes:false})
   }
 
   const formHandler = (e) => {
@@ -115,7 +105,7 @@ const Form = () => {
             </label>
             <input
               type="text"
-              className="form-control"
+              className="form-control text-capitalize"
               id="fname"
               name="fname"
               aria-describedby="fname"
@@ -131,7 +121,7 @@ const Form = () => {
             </label>
             <input
               type="text"
-              className="form-control"
+              className="form-control text-capitalize"
               id="lname"
               name="lname"
               placeholder="Last name"
@@ -148,7 +138,7 @@ const Form = () => {
           </label>
           <input
             type="text"
-            className="form-control"
+            className="form-control text-capitalize"
             id="city"
             name="city"
             placeholder="Enter City of Residence"
