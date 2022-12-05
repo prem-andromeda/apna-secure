@@ -23,7 +23,7 @@ const Otp = () => {
     e.preventDefault();
     const mergedOtp = otp.join("");
     // console.log(merged);
-    // console.log(otpValidate[0]);
+    // console.log(otpValidate);
     if (mergedOtp == otpValidate[0].otp_digit) {
       router.push(`/thankyou/${product}`);
       // console.log("form submitted");
