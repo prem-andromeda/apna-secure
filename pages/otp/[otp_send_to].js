@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { otpFetchUrl, otpPostUrl } from "../../apiUrl/apiUrl";
 
 const Otp = () => {
   const router = useRouter();
@@ -48,13 +49,10 @@ const Otp = () => {
 
   async function otpFetch() {
     try {
-      const res = await fetch(
-        `http://localhost:3000/api/otpVerify?mobile_no=${phoneNumber}`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const res = await fetch(`${otpFetchUrl}${phoneNumber}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
       const data = await res.json();
       // console.log(data);
       data.length > 0 && setOtpValidate((d) => [data[0]]);
@@ -71,7 +69,7 @@ const Otp = () => {
   async function otpPost() {
     setOtp(new Array(4).fill(""));
     try {
-      const res = await fetch("http://localhost:3000/api/otpPost", {
+      const res = await fetch(otpPostUrl, {
         method: "Post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

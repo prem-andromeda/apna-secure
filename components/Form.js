@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useState } from "react";
+import { otpPostUrl, postDataUrl } from "../apiUrl/apiUrl";
 
 const Form = () => {
   const router = useRouter();
@@ -27,7 +28,7 @@ const Form = () => {
   // console.log(form.mobileNo);
   async function postData() {
     try {
-      const res = await fetch("http://localhost:3000/api/postData", {
+      const res = await fetch(postDataUrl, {
         method: "Post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -56,7 +57,7 @@ const Form = () => {
 
   async function otpPost() {
     try {
-      const res = await fetch("http://localhost:3000/api/otpPost", {
+      const res = await fetch(otpPostUrl, {
         method: "Post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
