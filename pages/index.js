@@ -2,8 +2,6 @@ import Head from "next/head";
 import Form from "../components/Form";
 import InsuranceAdverise from "../components/InsuranceAdverise";
 
-// console.log(process.env.NAME);
-
 export default function Home() {
   return (
     <div>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { otpFetchUrl, otpPostUrl } from "../../apiUrl/apiUrl";
 
 const Otp = () => {
@@ -159,4 +159,4 @@ const Otp = () => {
   );
 };
 
-export default Otp;
+export default memo(Otp);

@@ -17,5 +17,9 @@
     "react-dom": "18.2.0",
     "react-icons": "^4.6.0",
     "react-otp-input": "^2.4.0"
+  },
+  "devDependencies": {
+    "eslint": "8.29.0",
+    "eslint-config-next": "13.0.6"
   }
 }

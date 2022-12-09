@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 const InsuranceAdverise = () => {
@@ -13,7 +14,13 @@ const InsuranceAdverise = () => {
         </p>
       </div>
       <div className="">
-        <img className="ads-img" src="insurance.png" alt="" />
+        <Image
+          width={500}
+          height={500}
+          className="ads-img"
+          src="/insurance.png"
+          alt=""
+        />
       </div>
     </div>
   );

@@ -11,7 +11,7 @@
 }
 
 .ads-img {
-  height: 100%;
+  height: 100% !important;
 }
 
 .container-box {
@@ -45,8 +45,8 @@
 
 @media screen and (max-width: 767px) {
   .ads-img {
-    height: auto;
-    width: 100%;
+    height: auto !important;
+    width: 100% !important;
   }
   .ads-container {
     min-height: 60vh;

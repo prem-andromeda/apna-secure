@@ -1,7 +1,8 @@
+import Image from "next/image";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { memo } from "react";
 
-const thankyou = () => {
+const Thankyou = () => {
   const router = useRouter();
   const { product } = router.query;
 
@@ -9,7 +10,13 @@ const thankyou = () => {
     <div className="container-box">
       <div className="thankyou-container">
         <div className="greeting-box">
-          <img className="done" src="/tick.gif" alt="" />
+          <Image
+            height={300}
+            width={300}
+            className="done"
+            src="/tick.gif"
+            alt=""
+          />
           <h1 className="display-4 fw-bold text-center thankyou-text">
             You have successfully applied for {product && product}.
           </h1>
@@ -22,4 +29,4 @@ const thankyou = () => {
   );
 };
 
-export default thankyou;
+export default memo(Thankyou);
